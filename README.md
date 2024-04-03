@@ -25,7 +25,7 @@ The `Cadr` library aims to provide a set of functional programming tools to the 
 
 5. **Recursion Over Iteration**: The library leans towards recursive patterns over iterative ones. While this may be slightly foreign to those accustomed to traditional looping mechanisms, recursion is a fundamental aspect of functional programming.
 
-6. **Code Clarity**: The library aims to present solutions in a way that they read as close to English as possible. For example, the `even?` function checks if a number is even, and `sum` calculates the sum of a list.
+6. **Code Clarity**: The library aims to present solutions in a way that they read as close to English as possible. For example, the `evenp` function checks if a number is even, and `sum` calculates the sum of a list.
 
 7. **Declarative Over Imperative**: `Cadr` favors a declarative approach. Instead of specifying _how_ to achieve something step-by-step, you describe _what_ you want to achieve, and the library takes care of the details.
 
