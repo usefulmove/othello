@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 2, 2024
-;; Version: 0.4.0
+;; Modified: April 6, 2024
+;; Version: 0.5.0
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/cadr
 ;; Package-Requires: ((emacs "25.1"))
@@ -250,17 +250,6 @@
     (concat error-prelude "error: drop test(s) failed")))
 
 
-(defun cadr-test-do (error-prelude)
-  (assert-equal
-    (let ((cnt 0))
-      (do (setq cnt (inc cnt))
-          (setq cnt (inc cnt))
-          (setq cnt (inc cnt)))
-      cnt)
-    3
-    (concat error-prelude "error: do test(s) failed")))
-
-
 (defun cadr-test-begin (error-prelude)
   (assert-equal
     (let ((cnt 0))
@@ -402,7 +391,6 @@
   'cadr-test-zip
   'cadr-test-enumerate-partition
   'cadr-test-tally
-  'cadr-test-do
   'cadr-test-begin
   'cadr-test-for-comprehension
   'cadr-test-equality

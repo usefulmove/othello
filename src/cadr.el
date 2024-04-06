@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 3, 2024
-;; Version: 0.4.0
+;; Modified: April 6, 2024
+;; Version: 0.5.0
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/cadr
 ;; Package-Requires: ((emacs "25.1"))
@@ -102,12 +102,6 @@
 
 ;; flatten :: [[T]] -> [T]
 (fset 'flatten '-flatten)
-
-
-;; do (deprecated - replaced by begin)
-(defmacro do (&rest forms)
-  "Evaluate body FORMS sequentially and return value of the last one."
-  `(let () ,@forms))
 
 
 ;; begin
