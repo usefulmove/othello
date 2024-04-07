@@ -1,23 +1,23 @@
-;;; cadr.el --- Cadr functional programming library -*- lexical-binding: t; -*-
+;;; othello.el --- Othello functional programming library -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Robert Duane Edmonds
 ;;
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 6, 2024
-;; Version: 0.5.0
+;; Modified: April 7, 2024
+;; Version: 0.6.0
 ;; Keywords: language extensions internal lisp tools emacs
-;; Homepage: https://github.com/usefulmove/cadr
+;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
 ;;; Commentary:
 ;;
-;;  Description: Cadr functional programming library
+;;  Description: Othello functional programming library
 ;;
-;;  Unit tests: ~/repos/cadr/src/cadr-test.el
+;;  Unit tests: ~/repos/othello/src/othello-test.el
 ;;
 ;;; Code:
 
@@ -492,5 +492,5 @@ specified indicies (INDS)."
 
 
 
-(provide 'cadr)
-;;; cadr.el ends here
+(provide 'othello)
+;;; othello.el ends here
