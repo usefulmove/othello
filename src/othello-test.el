@@ -228,14 +228,14 @@
   (o-assert-equal
    (o-zip '(3 1 2 5 4)
           '(0 1 2 3))
-   '((3 . 0) (1 . 1) (2 . 2) (5 . 3))
+   '((3 0) (1 1) (2 2) (5 3))
    (concat error-prelude "error: zip test(s) failed")))
 
 
 (defun othello-test-enumerate-partition (error-prelude)
   (o-assert-equal
     (o-enumerate '(3 1 2 5 4))
-    '((0 . 3) (1 . 1) (2 . 2) (3 . 5) (4 . 4))
+    '((0 3) (1 1) (2 2) (3 5) (4 4))
     (concat error-prelude "error: enumerate test(s) failed"))
   (o-assert-equal
     (o-partition 'o-oddp '(8 1 2 0 3 5 4 6))
@@ -275,9 +275,9 @@
     (concat error-prelude "error: for comprehension test(s) failed"))
   (o-assert-equal
     (o-for-comp ((pair (o-enumerate '(3 1 2))))
-      (let ((i (car pair))
-            (a (cdr pair)))
-        (* i (* a a))))
+      (let ((ind (car pair))
+            (a (cadr pair)))
+        (* ind (* a a))))
     '(0 1 8)
     (concat error-prelude "error: for comprehension test(s) failed"))
   (o-assert-equal

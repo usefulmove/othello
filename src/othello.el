@@ -382,9 +382,9 @@ of the two provided lists."
   (cond ((or (null lst1)
              (null lst2)) '())
         (t (cons (cons (car lst1)
-                       (car lst2))
+                       (list (car lst2)))
                  (o-zip (cdr lst1)
-                      (cdr lst2))))))
+                        (cdr lst2))))))
 
 
 ;; o-enumerate :: [T] -> [[integer . T]]
