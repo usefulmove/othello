@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
 ;; Modified: April 7, 2024
-;; Version: 0.6.0
+;; Version: 0.6.2
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -28,216 +28,223 @@
 ;; test definitions
 
 (defun othello-test-compound (error-prelude)
-  (when (not (zerop (- 204 (sum (map
-                                  (\ (a) (* a a))
-                                  (range (inc 8)))))))
-    (error (concat error-prelude "error: compound test(s) failed")))
-  (assert-equal
-    (call (memoize 'inc) 8)
+  (when (not (o-zerop (- 204 (o-sum (o-map
+                                  (lambda (a) (* a a))
+                                  (o-range (o-inc 8)))))))
+    (error (concat error-prelude "error: compound (1) test(s) failed")))
+  (o-assert-equal
+    (o-call (o-memoize 'o-inc) 8)
     9
-    (error (concat error-prelude "error: compound test(s) failed")))
-  (assert-equal
-    (range 1 3)
+    (error (concat error-prelude "error: compound (1) test(s) failed")))
+  (o-assert-equal
+    (o-range 1 3)
     '(1 2)
-    (error (concat error-prelude "error: compound test(s) failed")))
-  (assert-equal
-    (range 100 (inc 200) 20)
+    (error (concat error-prelude "error: compound (1) test(s) failed")))
+  (o-assert-equal
+    (o-range 100 (o-inc 200) 20)
     '(100 120 140 160 180 200)
-    (error (concat error-prelude "error: compound test(s) failed"))))
+    (error (concat error-prelude "error: compound (1) test(s) failed"))))
 
 
 (defun othello-test-compound2 (error-prelude)
-  (assert-equal
-    (prod (filter 'oddp (map
-                          (\ (a) (* a a a))
-                          (range (dec 10)))))
+  (o-assert-equal
+    (o-product (o-filter 'o-oddp (o-map
+                          (lambda (a) (* a a a))
+                          (o-range (o-dec 10)))))
     1157625
-    (concat error-prelude "error: compound2 test(s) failed"))
-  (assert-equal
-    (init '(3 1 2))
+    (concat error-prelude "error: compound (2) test(s) failed"))
+  (o-assert-equal
+    (o-init '(3 1 2))
     '(3 1)
-    (concat error-prelude "error: compound2 test(s) failed"))
-  (assert-equal
-    (end '(3 1 2))
+    (concat error-prelude "error: compound (2) test(s) failed"))
+  (o-assert-equal
+    (o-last '(3 1 2))
     2
-    (concat error-prelude "error: compound2 test(s) failed"))
-  (assert-equal
-    (allp 'evenp (map
-                   (\ (a) (* 2 a))
-                   (range (inc 31))))
+    (concat error-prelude "error: compound (2) test(s) failed"))
+  (o-assert-equal
+    (o-allp 'o-evenp (o-map
+                   (lambda (a) (* 2 a))
+                   (o-range (o-inc 31))))
     t
-    (concat error-prelude "error: compound2 test(s) failed"))
-  (assert-equal
-    (gcd 18 30 12)
+    (concat error-prelude "error: compound (2) test(s) failed"))
+  (o-assert-equal
+   (o-gcd 18 30 12)
     6
-    (concat error-prelude "error: compound2 test(s) failed"))
-  (assert-equal
-    (not (anyp 'ascii-numericp (list 46 47 58 59)))
-    (allp 'ascii-numericp (list ?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-    (concat error-prelude "error: compound2 test(s) failed"))
-  (assert-equal
-    (flatten '(3 1 (2 1 2)))
+    (concat error-prelude "error: compound (2) test(s) failed"))
+  (o-assert-equal
+    (not (o-anyp 'o-ascii-numeric-p (list 46 47 58 59)))
+    (o-allp 'o-ascii-numeric-p (list ?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+    (concat error-prelude "error: compound (2) test(s) failed"))
+  (o-assert-equal
+    (o-flatten '(3 1 (2 1 2)))
     '(3 1 2 1 2)
-    (concat error-prelude "error: compound2 test(s) failed")))
+    (concat error-prelude "error: compound (2) test(s) failed")))
 
 
 (defun othello-test-compound3 (error-prelude)
-  (when (anyp 'evenp '(3 1 5 9 7))
-    (error (concat error-prelude "error: compound3 test(s) failed")))
-  (assert-equal
-    (remove-duplicates '(8 1 2 8 5 4 0 8))
+  (when (o-anyp 'o-evenp '(3 1 5 9 7))
+    (error (concat error-prelude "error: compound (3) test(s) failed")))
+  (o-assert-equal
+    (o-remove-duplicates '(8 1 2 8 5 4 0 8))
     '(8 1 2 5 4 0)
-    (concat error-prelude "error: compound3 test(s) failed"))
-  (assert-equal
-   (containsp 0 '(3 1 2 0 5 4))
+    (concat error-prelude "error: compound (3) test(s) failed"))
+  (o-assert-equal
+   (o-containsp 0 '(3 1 2 0 5 4))
    t
-   (concat error-prelude "error: compound3 test(s) failed"))
-  (assert-equal
-   (containsp 0 '(3 1 2 5 4))
+   (concat error-prelude "error: compound (3) test(s) failed"))
+  (o-assert-equal
+   (o-containsp 0 '(3 1 2 5 4))
    nil
-   (concat error-prelude "error: compound3 test(s) failed")))
+   (concat error-prelude "error: compound (3) test(s) failed")))
 
 
 (defun othello-test-function-composition (error-prelude)
-  (when (not-equal-p (thread 5
+  (when (o-not-equal-p (o-thread 5
                       'sqrt
-                      (\ (a) (- a 1))
-                      (\ (a) (/ a 2)))
-                    (call (pipe 'sqrt
-                                (\ (a) (- a 1))
-                                (\ (a) (/ a 2)))
+                      (lambda (a) (- a 1))
+                      (lambda (a) (/ a 2)))
+                    (o-call (o-pipe 'sqrt
+                                (lambda (a) (- a 1))
+                                (lambda (a) (/ a 2)))
                      5))
     (error (concat error-prelude "error: function composition (1) test(s) failed"))))
 
 
 (defun othello-test-function-composition2 (error-prelude)
-  (when (not= (thread 5
+  (when (o-not= (o-thread 5
                 'sqrt
-                (\ (a) (- a 1))
-                (\ (a) (/ a 2)))
-              (call (compose (\ (a) (/ a 2))
-                             (\ (a) (- a 1))
+                (lambda (a) (- a 1))
+                (lambda (a) (/ a 2)))
+              (o-call (o-compose (lambda (a) (/ a 2))
+                             (lambda (a) (- a 1))
                              'sqrt)
                5))
     (error (concat error-prelude "error: function composition (2) test(s) failed"))))
 
 
-(defun othello-test-string-join (error-prelude)
-  (assert-equal
-    (join '("3" "1" "2" "5" "4"))
+(defun othello-test-string-o-join (error-prelude)
+  (o-assert-equal
+    (o-join '("3" "1" "2" "5" "4"))
     "31254"
     (concat error-prelude "error: string join test(s) failed"))
-  (assert-equal
-    (join '("3" "1" "2" "5" "4") ", ")
+  (o-assert-equal
+    (o-join '("3" "1" "2" "5" "4") ", ")
     "3, 1, 2, 5, 4"
     (concat error-prelude "error: string join test(s) failed"))
   (let ((s "desafortunadamente"))
-    (assert-equal
-      (thread s
+    (o-assert-equal
+      (o-thread s
         'string-to-list
         'reverse
-        'join-chars)
+        'o-join-chars)
       (reverse s)
       (concat error-prelude "error: string join test(s) failed"))))
 
 
 (defun othello-test-curry (error-prelude)
-  (letrec ((square (\ (a) (* a a)))
-           (sum-squares (lambda (a b)
-                          (sqrt (+ (call square a)
-                                   (call square b))))))
-    (assert-equal
-      (call sum-squares 3 4)
-      (call (call (curry2 sum-squares) 3) 4)
+  (letrec ((square (lambda (a) (* a a)))
+           (o-sum-squares (lambda (a b)
+                          (sqrt (+ (o-call square a)
+                                   (o-call square b))))))
+    (o-assert-equal
+      (o-call o-sum-squares 3 4)
+      (o-call (o-call (o-curry2 o-sum-squares) 3) 4)
       (concat error-prelude "error: curry test(s) failed"))))
 
 
 (defun othello-test-partial (error-prelude)
-  (letrec ((square (\ (a) (* a a)))
-           (sum-squares (lambda (a b)
-                          (sqrt (+ (call square a)
-                                   (call square b))))))
-    (assert-equal
-      (call sum-squares 3 4)
-      (call (partial sum-squares 3) 4)
+  (letrec ((square (lambda (a) (* a a)))
+           (o-sum-squares (lambda (a b)
+                          (sqrt (+ (o-call square a)
+                                   (o-call square b))))))
+    (o-assert-equal
+      (o-call o-sum-squares 3 4)
+      (o-call (o-partial o-sum-squares 3) 4)
       (concat error-prelude "error: partial test(s) failed"))))
 
 
-(defun othello-test-foldl (error-prelude)
-  (assert-equal
-    (foldl (lambda (acc a) (+ acc (* a a))) 0 (range (inc 8)))
+(defun othello-test-fold-left (error-prelude)
+  (o-assert-equal
+    (o-fold-left (lambda (acc a) (+ acc (* a a))) 0 (o-range (o-inc 8)))
     204
-    (concat error-prelude "error: foldl test(s) failed"))
+    (concat error-prelude "error: fold-left test(s) failed"))
   (let ((input "this is a test"))
-    (assert-equal
+    (o-assert-equal
       (fold
         (lambda (acc a)
-               (concat acc (join-chars (list a))))
+               (concat acc (o-join-chars (list a))))
         ""
         (string-to-list input))
       input
       (concat error-prelude "error: fold test(s) failed")))
   (let ((test-list '(3 1 2 5 4)))
-    (assert-equal
-      (foldl
+    (o-assert-equal
+      (o-fold-left
         (lambda (acc a) (cons a acc))
         '()
         test-list)
       (reverse test-list)
-      (concat error-prelude "error: foldl (2) test(s) failed"))))
+      (concat error-prelude "error: fold-left (2) test(s) failed"))))
 
 
-(defun othello-test-foldr (error-prelude)
+(defun othello-test-fold-right (error-prelude)
   (let ((test-list '(3 1 2 5 4)))
-    (assert-equal
-      (foldr
+    (o-assert-equal
+      (o-fold-right
         (lambda (acc a) (cons a acc))
         '()
         test-list)
       test-list
-      (concat error-prelude "error: foldr test(s) failed"))))
+      (concat error-prelude "error: fold-right test(s) failed"))))
 
 
 (defun othello-test-drop-take (error-prelude)
-  (assert-equal
-    (take 3 '(3 1 2 0 5 4))
+  (o-assert-equal
+    (o-take 3 '(3 1 2 0 5 4))
     '(3 1 2)
     (concat error-prelude "error: take test(s) failed"))
-  (assert-equal
-    (takebut 2 '(3 1 2 0 5 4))
+  (o-assert-equal
+    (o-takebut 2 '(3 1 2 0 5 4))
     '(3 1 2 0)
     (concat error-prelude "error: take test(s) failed"))
-  (assert-equal
-    (drop 3 '(3 1 2 0 5 4))
+  (o-assert-equal
+    (o-drop 3 '(3 1 2 0 5 4))
     '(0 5 4)
     (concat error-prelude "error: drop test(s) failed"))
-  (assert-equal
-    (dropbut 2 '(3 1 2 0 5 4))
+  (o-assert-equal
+    (o-dropbut 2 '(3 1 2 0 5 4))
     '(5 4)
     (concat error-prelude "error: drop test(s) failed")))
 
 
+(defun othello-test-slice (error-prelude)
+  (o-assert-equal
+   (o-slice 1 4 '(3 1 2 5 4 0))
+   '(1 2 5)
+   (concat error-prelude "error: slice test(s) failed")))
+
+
 (defun othello-test-zip (error-prelude)
-  (assert-equal
-    (zip '(3 1 2 5 4)
-         '(0 1 2 3))
-    '((3 . 0) (1 . 1) (2 . 2) (5 . 3))
-    (concat error-prelude "error: zip test(s) failed")))
+  (o-assert-equal
+   (o-zip '(3 1 2 5 4)
+          '(0 1 2 3))
+   '((3 . 0) (1 . 1) (2 . 2) (5 . 3))
+   (concat error-prelude "error: zip test(s) failed")))
 
 
 (defun othello-test-enumerate-partition (error-prelude)
-  (assert-equal
-    (enumerate '(3 1 2 5 4))
+  (o-assert-equal
+    (o-enumerate '(3 1 2 5 4))
     '((0 . 3) (1 . 1) (2 . 2) (3 . 5) (4 . 4))
     (concat error-prelude "error: enumerate test(s) failed"))
-  (assert-equal
-    (partition 'oddp '(8 1 2 0 3 5 4 6))
+  (o-assert-equal
+    (o-partition 'o-oddp '(8 1 2 0 3 5 4 6))
     '((5 3 1) (6 4 0 2 8))
     (concat error-prelude "error: enumerate test(s) failed")))
 
 
 (defun othello-test-tally (error-prelude)
-  (assert-equal
+  (o-assert-equal
     (let ((s "As twilight cascaded upon the horizon, the iridescent hues of
               amaranthine skies caressed the gentle whispers of the zephyr,
               weaving an ephemeral symphony of love that intertwined the souls
@@ -245,119 +252,119 @@
               harmony.")
           (get-count (lambda (key counts)
                        (cdr (assoc key counts)))))
-      (call get-count ?e (tally (string-to-list s))))
+      (o-call get-count ?e (o-tally (string-to-list s))))
     33
     (concat error-prelude "error: drop test(s) failed")))
 
 
-(defun othello-test-begin (error-prelude)
-  (assert-equal
+(defun othello-test-o-begin (error-prelude)
+  (o-assert-equal
     (let ((cnt 0))
-      (begin (setq cnt (inc cnt))
-          (setq cnt (inc cnt))
-          (setq cnt (inc cnt)))
+      (o-begin (setq cnt (o-inc cnt))
+          (setq cnt (o-inc cnt))
+          (setq cnt (o-inc cnt)))
       cnt)
     3
     (concat error-prelude "error: begin test(s) failed")))
 
 
 (defun othello-test-for-comprehension (error-prelude)
-  (assert-equal
-    (for-comp ((a (range (inc 8)))) (* a a a))
+  (o-assert-equal
+    (o-for-comp ((a (o-range (o-inc 8)))) (* a a a))
     '(0 1 8 27 64 125 216 343 512)
     (concat error-prelude "error: for comprehension test(s) failed"))
-  (assert-equal
-    (for-comp ((pair (enumerate '(3 1 2))))
+  (o-assert-equal
+    (o-for-comp ((pair (o-enumerate '(3 1 2))))
       (let ((i (car pair))
             (a (cdr pair)))
         (* i (* a a))))
     '(0 1 8)
     (concat error-prelude "error: for comprehension test(s) failed"))
-  (assert-equal
-    (for-comp ((i (range 3))
-               (j (range 3)))
+  (o-assert-equal
+    (o-for-comp ((i (o-range 3))
+                 (j (o-range 3)))
       (cons i j))
     '((0 . 0) (0 . 1) (0 . 2) (1 . 0) (1 . 1) (1 . 2) (2 . 0) (2 . 1) (2 . 2))
     (concat error-prelude "error: for comprehension test(s) failed")))
 
 
 (defun othello-test-equality (error-prelude)
-  (assert-equal
-    (not= 1 1.0 1) ; nil
-    (eqp 1 1.0) ; nil
+  (o-assert-equal
+    (o-not= 1 1.0 1) ; nil
+    (o-eqp 1 1.0) ; nil
     (concat error-prelude "error: equality test(s) failed"))
-  (assert-equal
-    (not-eq-p 1 1.0) ; t
-    (not-equal-p 1 1.0) ; t
+  (o-assert-equal
+    (o-not-eq-p 1 1.0) ; t
+    (o-not-equal-p 1 1.0) ; t
     (concat error-prelude "error: equality test(s) failed"))
   (let ((a "eight")
         (b "eight"))
-    (assert-equal
-      (equalp a b) ; t
-      (not-eq-p a b) ; t
+    (o-assert-equal
+      (o-equalp a b) ; t
+      (o-not-eq-p a b) ; t
       (concat error-prelude "error: equality test(s) failed")))
-  (assert-equal
-    (not= 1 1.0) ; nil
-    (not-equal-p 1 1) ; nil
+  (o-assert-equal
+    (o-not= 1 1.0) ; nil
+    (o-not-equal-p 1 1) ; nil
     (concat error-prelude "error: equality test(s) failed")))
 
 
 (defun othello-test-chars (error-prelude)
-  (assert-equal
-    (char-to-int ?8)
+  (o-assert-equal
+    (o-char-to-int ?8)
     8
     (concat error-prelude "error: equality test(s) failed"))
-  (assert-equal
-    (char-to-ord ?8)
+  (o-assert-equal
+    (o-char-to-ord ?8)
     56
     (concat error-prelude "error: equality test(s) failed")))
 
 (defun othello-test-impure (error-prelude)
   (let ((n 0))
-    (for-each
+    (o-for-each
       (lambda (a)
         (setq n (+ n (* a a))))
       '(3 1 2 0 5 4))
-    (assert-equal
+    (o-assert-equal
       n
       55
       (concat error-prelude "error: impure test(s) failed")))
   (let ((n 0))
-    (for ((a '(3 1 2 0 5 4)))
+    (o-for ((a '(3 1 2 0 5 4)))
       (setq n (+ n (* a a))))
-    (assert-equal
+    (o-assert-equal
       n
       55
       (concat error-prelude "error: impure test(s) failed"))))
 
 
-(defun othello-test-list-ref (error-prelude)
-  (assert-equal
-    (list-ref '(3 1 2 0 5) 2)
+(defun othello-test-o-list-ref (error-prelude)
+  (o-assert-equal
+    (o-list-ref '(3 1 2 0 5) 2)
     2
     (concat error-prelude "error: list-ref test(s) failed"))
-  (assert-equal
-    (list-ref '((8 1 2)
+  (o-assert-equal
+    (o-list-ref '((8 1 2)
                  (0 5 4)) 1 2)
     4
     (concat error-prelude "error: list-ref test(s) failed"))
-  (assert-equal
-    (list-ref '(8 1 2) 0)
+  (o-assert-equal
+    (o-list-ref '(8 1 2) 0)
     8
     (concat error-prelude "error: list-ref test(s) failed")))
 
 
 (defun othello-test-logic (error-prelude)
-  (assert-equal
-   (truep t)
+  (o-assert-equal
+   (o-truep t)
    t
    (concat error-prelude "error: truep test(s) failed"))
-  (assert-equal
-   (truep nil)
+  (o-assert-equal
+   (o-truep nil)
    nil
    (concat error-prelude "error: truep test(s) failed"))
-  (assert-equal
-   (emptyp '())
+  (o-assert-equal
+   (o-emptyp '())
    t
    (concat error-prelude "error: emptyp test(s) failed")))
 
@@ -368,11 +375,11 @@
 (defun othello-test-run-tests (&rest tests)
   (letrec ((prelude "othello-test ... ")
            (execute-tests (lambda (fns)
-                            (cond ((nullp fns) nil)
-                                  (else (call (car fns) prelude)
-                                        (call execute-tests (cdr fns)))))))
+                            (cond ((o-nullp fns) nil)
+                                  (t (o-call (car fns) prelude)
+                                     (o-call execute-tests (cdr fns)))))))
     (message (concat prelude "running tests..."))
-    (call execute-tests tests)
+    (o-call execute-tests tests)
     (message (concat prelude "passed all tests"))))
 
 
@@ -382,16 +389,17 @@
   'othello-test-compound3
   'othello-test-function-composition
   'othello-test-function-composition2
-  'othello-test-string-join
+  'othello-test-string-o-join
   'othello-test-curry
   'othello-test-partial
-  'othello-test-foldl
-  'othello-test-foldr
+  'othello-test-fold-left
+  'othello-test-fold-right
   'othello-test-drop-take
+  'othello-test-slice
   'othello-test-zip
   'othello-test-enumerate-partition
   'othello-test-tally
-  'othello-test-begin
+  'othello-test-o-begin
   'othello-test-for-comprehension
   'othello-test-equality
   'othello-test-chars
