@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: April 7, 2024
-;; Version: 0.6.2
+;; Version: 0.6.3
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -482,6 +482,13 @@ specified indicies (INDS)."
   "Remove duplicates from list (LST)."
   (let ((counts (o-tally lst)))
     (o-map 'car counts)))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; definitions
+
+(setq o-else t)
 
 
 

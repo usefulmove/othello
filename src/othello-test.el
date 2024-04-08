@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
 ;; Modified: April 7, 2024
-;; Version: 0.6.2
+;; Version: 0.6.3
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -376,8 +376,8 @@
   (letrec ((prelude "othello-test ... ")
            (execute-tests (lambda (fns)
                             (cond ((o-nullp fns) nil)
-                                  (t (o-call (car fns) prelude)
-                                     (o-call execute-tests (cdr fns)))))))
+                                  (o-else (o-call (car fns) prelude)
+                                          (o-call execute-tests (cdr fns)))))))
     (message (concat prelude "running tests..."))
     (o-call execute-tests tests)
     (message (concat prelude "passed all tests"))))
