@@ -13,7 +13,7 @@
 
 ## Philosophy
 
-The Othello library aims to provide a set of functional programming tools to the Emacs Lisp. The philosophy that underlies its design and functionality can be summarized as follows:
+The Othello library aims to provide an expressive set of functional programming tools to the Emacs Lisp. The philosophy that underlies its design and functionality can be summarized as follows:
 
 1. **First-Class Functions**: In functional programming, functions are treated as first-class citizens, meaning they can be assigned to variables, passed as arguments, and returned as values. Othello follows this paradigm rigorously, with a focus on composing and manipulating functions.
 
