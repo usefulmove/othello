@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 7, 2024
-;; Version: 0.6.3
+;; Modified: April 9, 2024
+;; Version: 0.6.5
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -229,7 +229,11 @@
    (o-zip '(3 1 2 5 4)
           '(0 1 2 3))
    '((3 0) (1 1) (2 2) (5 3))
-   (concat error-prelude "error: zip test(s) failed")))
+   (concat error-prelude "error: zip test(s) failed"))
+  (o-assert-equal
+   (o-zip-with-index (make-list 9 0))
+   '((0 0) (1 0) (2 0) (3 0) (4 0) (5 0) (6 0) (7 0) (8 0))
+   (concat error-prelude "error: zip-with-index test(s) failed")))
 
 
 (defun othello-test-enumerate-partition (error-prelude)

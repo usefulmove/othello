@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: April 9, 2024
-;; Version: 0.6.4
+;; Version: 0.6.5
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -373,7 +373,7 @@ character does not represent an integer value."
   (o-drop start (o-take end lst)))
 
 
-;; o-zip :: [T] -> [U] -> [[T . U]]
+;; o-zip :: [T] -> [U] -> [[T U]]
 (defun o-zip (lst1 lst2)
   "Zip two lists (LST1) and (LST2) together and return an association list in
 which the first element comes from LST1 and the second element comes from LST2.
@@ -385,6 +385,11 @@ of the two provided lists."
                        (list (car lst2)))
                  (o-zip (cdr lst1)
                         (cdr lst2))))))
+
+
+;; o-zip-with-index :: [T]  ->  [[int T]]
+(defun o-zip-with-index (lst)
+  (o-zip (o-range (length lst)) lst))
 
 
 ;; o-enumerate :: [T] -> [[integer . T]]
