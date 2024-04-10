@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 9, 2024
-;; Version: 0.6.5
+;; Modified: April 10, 2024
+;; Version: 0.6.6
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -34,8 +34,8 @@
   `(not (= ,@args)))
 
 
-;; o-equalp :: T -> U -> boolean
-(defmacro o-equalp (a b)
+;; o-equal-p :: T -> U -> boolean
+(defmacro o-equal-p (a b)
   "Test that objects A and B have equal components."
   `(equal ,a ,b))
 
@@ -46,8 +46,8 @@
   `(not (equal ,a ,b)))
 
 
-;; o-eqp :: T -> U -> boolean
-(defmacro o-eqp (a b)
+;; o-eq-p :: T -> U -> boolean
+(defmacro o-eq-p (a b)
   "Test that objects A and B are the same object."
   `(eq ,a ,b))
 
@@ -58,24 +58,24 @@
   `(not (eq ,a ,b)))
 
 
-;; o-truep :: T -> boolean
-(defmacro o-truep (a)
+;; o-true-p :: T -> boolean
+(defmacro o-true-p (a)
   "Test that object A is true."
   `(not (null ,a)))
 
 
-;; o-nullp :: T -> boolean
-(defmacro o-nullp (a)
+;; o-null-p :: T -> boolean
+(defmacro o-null-p (a)
   "Test that object A is not null."
   `(null ,a))
 
-;; o-containsp :: T -> [T] -> boolean
-(defmacro o-containsp (a lst)
-  `(o-truep (member ,a ,lst)))
+;; o-contains-p :: T -> [T] -> boolean
+(defmacro o-contains-p (a lst)
+  `(o-true-p (member ,a ,lst)))
 
 
-;; o-emptyp :: [T] -> boolean
-(defmacro o-emptyp (a)
+;; o-empty-p :: [T] -> boolean
+(defmacro o-empty-p (a)
   `(null ,a))
 
 
@@ -240,20 +240,20 @@ of function application is reversed from the o-compose function."
   (- n 1))
 
 
-;; o-evenp :: number -> boolean
-(defun o-evenp (n)
+;; o-even-p :: number -> boolean
+(defun o-even-p (n)
   "Is N even?"
   (= 0 (mod n 2)))
 
 
-;; o-oddp :: number -> boolean
-(defun o-oddp (n)
+;; o-odd-p :: number -> boolean
+(defun o-odd-p (n)
   "Is N odd?"
   (= 1 (mod n 2)))
 
 
-;; o-zerop :: number -> boolean
-(defun o-zerop (n)
+;; o-zero-p :: number -> boolean
+(defun o-zero-p (n)
   "Is N equal to zero?"
   (= 0 n))
 
@@ -276,21 +276,21 @@ of function application is reversed from the o-compose function."
   (apply '* lst))
 
 
-;; o-allp :: (T -> boolean) -> [T] -> boolean
-(defun o-allp (f lst)
+;; o-all-p :: (T -> boolean) -> [T] -> boolean
+(defun o-all-p (f lst)
   "Check that function applied to all values in the list returns true."
   (cond ((null lst) t)
         ((not (funcall f (car lst))) nil)
-        (t (o-allp f (cdr lst)))))
+        (t (o-all-p f (cdr lst)))))
 
 
-;; o-anyp :: (T -> boolean) -> [T] -> boolean
-(defun o-anyp (f lst)
+;; o-any-p :: (T -> boolean) -> [T] -> boolean
+(defun o-any-p (f lst)
   "Check that function (F) applied to at least one value in the
 list (LST) returns true."
   (cond ((null lst) nil)
         ((funcall f (car lst)) t)
-        (t (o-anyp f (cdr lst)))))
+        (t (o-any-p f (cdr lst)))))
 
 
 ;; o-init :: [T] -> [T]

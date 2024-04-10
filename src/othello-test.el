@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 9, 2024
-;; Version: 0.6.5
+;; Modified: April 10, 2024
+;; Version: 0.6.6
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -28,7 +28,7 @@
 ;; test definitions
 
 (defun othello-test-compound (error-prelude)
-  (when (not (o-zerop (- 204 (o-sum (o-map
+  (when (not (o-zero-p (- 204 (o-sum (o-map
                                   (lambda (a) (* a a))
                                   (o-range (o-inc 8)))))))
     (error (concat error-prelude "error: compound (1) test(s) failed")))
@@ -48,7 +48,7 @@
 
 (defun othello-test-compound2 (error-prelude)
   (o-assert-equal
-    (o-product (o-filter 'o-oddp (o-map
+    (o-product (o-filter 'o-odd-p (o-map
                           (lambda (a) (* a a a))
                           (o-range (o-dec 10)))))
     1157625
@@ -62,7 +62,7 @@
     2
     (concat error-prelude "error: compound (2) test(s) failed"))
   (o-assert-equal
-    (o-allp 'o-evenp (o-map
+    (o-all-p 'o-even-p (o-map
                    (lambda (a) (* 2 a))
                    (o-range (o-inc 31))))
     t
@@ -72,8 +72,8 @@
     6
     (concat error-prelude "error: compound (2) test(s) failed"))
   (o-assert-equal
-    (not (o-anyp 'o-ascii-numeric-p (list 46 47 58 59)))
-    (o-allp 'o-ascii-numeric-p (list ?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
+    (not (o-any-p 'o-ascii-numeric-p (list 46 47 58 59)))
+    (o-all-p 'o-ascii-numeric-p (list ?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
     (concat error-prelude "error: compound (2) test(s) failed"))
   (o-assert-equal
     (o-flatten '(3 1 (2 1 2)))
@@ -82,18 +82,18 @@
 
 
 (defun othello-test-compound3 (error-prelude)
-  (when (o-anyp 'o-evenp '(3 1 5 9 7))
+  (when (o-any-p 'o-even-p '(3 1 5 9 7))
     (error (concat error-prelude "error: compound (3) test(s) failed")))
   (o-assert-equal
     (o-remove-duplicates '(8 1 2 8 5 4 0 8))
     '(8 1 2 5 4 0)
     (concat error-prelude "error: compound (3) test(s) failed"))
   (o-assert-equal
-   (o-containsp 0 '(3 1 2 0 5 4))
+   (o-contains-p 0 '(3 1 2 0 5 4))
    t
    (concat error-prelude "error: compound (3) test(s) failed"))
   (o-assert-equal
-   (o-containsp 0 '(3 1 2 5 4))
+   (o-contains-p 0 '(3 1 2 5 4))
    nil
    (concat error-prelude "error: compound (3) test(s) failed")))
 
@@ -242,7 +242,7 @@
     '((0 3) (1 1) (2 2) (3 5) (4 4))
     (concat error-prelude "error: enumerate test(s) failed"))
   (o-assert-equal
-    (o-partition 'o-oddp '(8 1 2 0 3 5 4 6))
+    (o-partition 'o-odd-p '(8 1 2 0 3 5 4 6))
     '((5 3 1) (6 4 0 2 8))
     (concat error-prelude "error: enumerate test(s) failed")))
 
@@ -295,7 +295,7 @@
 (defun othello-test-equality (error-prelude)
   (o-assert-equal
     (o-not= 1 1.0 1) ; nil
-    (o-eqp 1 1.0) ; nil
+    (o-eq-p 1 1.0) ; nil
     (concat error-prelude "error: equality test(s) failed"))
   (o-assert-equal
     (o-not-eq-p 1 1.0) ; t
@@ -304,7 +304,7 @@
   (let ((a "eight")
         (b "eight"))
     (o-assert-equal
-      (o-equalp a b) ; t
+      (o-equal-p a b) ; t
       (o-not-eq-p a b) ; t
       (concat error-prelude "error: equality test(s) failed")))
   (o-assert-equal
@@ -360,17 +360,17 @@
 
 (defun othello-test-logic (error-prelude)
   (o-assert-equal
-   (o-truep t)
+   (o-true-p t)
    t
-   (concat error-prelude "error: truep test(s) failed"))
+   (concat error-prelude "error: true-p test(s) failed"))
   (o-assert-equal
-   (o-truep nil)
+   (o-true-p nil)
    nil
-   (concat error-prelude "error: truep test(s) failed"))
+   (concat error-prelude "error: true-p test(s) failed"))
   (o-assert-equal
-   (o-emptyp '())
+   (o-empty-p '())
    t
-   (concat error-prelude "error: emptyp test(s) failed")))
+   (concat error-prelude "error: empty-p test(s) failed")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -379,7 +379,7 @@
 (defun othello-test-run-tests (&rest tests)
   (letrec ((prelude "othello-test ... ")
            (execute-tests (lambda (fns)
-                            (cond ((o-nullp fns) nil)
+                            (cond ((o-null-p fns) nil)
                                   (o-else (o-call (car fns) prelude)
                                           (o-call execute-tests (cdr fns)))))))
     (message (concat prelude "running tests..."))
