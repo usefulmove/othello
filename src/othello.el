@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 7, 2024
-;; Version: 0.6.3
+;; Modified: April 9, 2024
+;; Version: 0.6.4
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -417,16 +417,16 @@ which F returns nil (false)."
   "Count elements in list (LST) and return an association list with
 key-count pairs."
   (setq counts-hash (if o-map
-                      o-map
-                      (make-hash-table :test 'equal)))
-  (if (null lst)
-    counts-hash
-    (o-begin
-      (puthash ; add first element to table
-        (car lst)
-        (+ 1 (gethash (car lst) counts-hash 0))
-        counts-hash)
-      (o-tally (cdr lst) counts-hash))) ; recursively run on rest of list (tail recursion)
+                        o-map
+                        (make-hash-table :test 'equal)))
+
+  (unless (null lst)
+    (puthash ; add first element to table
+     (car lst)
+     (+ 1 (gethash (car lst) counts-hash 0))
+     counts-hash)
+    (o-tally (cdr lst) counts-hash)) ; recursively run on rest of list
+
   (let ((counts '()))
     (maphash ; convert hash table to association list
       (lambda (key value)
