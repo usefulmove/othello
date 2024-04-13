@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 10, 2024
-;; Version: 0.6.6
+;; Modified: April 12, 2024
+;; Version: 0.7.6
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -99,14 +99,17 @@
 
 
 (defun othello-test-function-composition (error-prelude)
-  (when (o-not-equal-p (o-thread 5
-                      'sqrt
-                      (lambda (a) (- a 1))
-                      (lambda (a) (/ a 2)))
-                    (o-call (o-pipe 'sqrt
-                                (lambda (a) (- a 1))
-                                (lambda (a) (/ a 2)))
-                     5))
+  (when (o-not-equal-p (o-thread
+                        5
+                        'sqrt
+                        (lambda (a) (- a 1))
+                        (lambda (a) (/ a 2)))
+    (o-call (o-pipe
+             'o-id
+             'sqrt
+             (lambda (a) (- a 1))
+             (lambda (a) (/ a 2)))
+     5))
     (error (concat error-prelude "error: function composition (1) test(s) failed"))))
 
 

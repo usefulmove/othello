@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 10, 2024
-;; Version: 0.6.6
+;; Modified: April 12, 2024
+;; Version: 0.7.6
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -139,6 +139,18 @@ permutations to generate list of mapped results."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; functions
+
+;; o-id :: T -> T
+(defun o-id (object) object)
+(defmacro o-identity (object)
+  `(o-id ,object))
+
+
+;; o-id-msg :: T -> T (impure)
+(defun o-id-msg (object)
+  (message (prin1-to-string object))
+  object)
+
 
 ;; o-fold-left :: (U -> T -> U) -> U -> [T] -> U
 (defun o-fold-left (f acc lst)
