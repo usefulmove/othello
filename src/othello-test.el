@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 12, 2024
-;; Version: 0.7.6
+;; Modified: April 14, 2024
+;; Version: 0.7.7
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -375,6 +375,12 @@
    t
    (concat error-prelude "error: empty-p test(s) failed")))
 
+(defun othello-test-adjacent-map (error-prelude)
+  (o-assert-equal
+   (o-adjacent-map '* '(3 1 2 0 5 4))
+   '(3 2 0 0 20)
+   (concat error-prelude "error: adjacent-map test(s) failed")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; run unit tests
@@ -411,7 +417,8 @@
   'othello-test-equality
   'othello-test-chars
   'othello-test-impure
-  'othello-test-logic)
+  'othello-test-logic
+  'othello-test-adjacent-map)
 
 
 

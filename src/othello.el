@@ -501,6 +501,13 @@ specified indicies (INDS)."
     (o-map 'car counts)))
 
 
+;; o-adjacent-map :: [T] -> (T -> U) -> [U]
+(defun o-adjacent-map (f lst)
+  (o-map
+   (lambda (sublst) (message (apply 'format "%d %d" sublst)) (apply f sublst))
+   (o-zip (o-init lst)
+          (cdr lst))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; definitions
