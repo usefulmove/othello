@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
 ;; Modified: April 14, 2024
-;; Version: 0.7.8
+;; Version: 0.7.10
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -270,7 +270,7 @@
               of all living beings in the tender embrace of nature's eternal
               harmony.")
           (get-count (lambda (key counts)
-                       (cdr (assoc key counts)))))
+                       (o-tail (assoc key counts)))))
       (o-call get-count ?e (o-tally (string-to-list s))))
     33
     (concat error-prelude "error: drop test(s) failed")))
