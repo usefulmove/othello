@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: April 14, 2024
-;; Version: 0.7.7
+;; Version: 0.7.8
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -399,9 +399,19 @@ of the two provided lists."
                         (cdr lst2))))))
 
 
-;; o-zip-with-index :: [T]  ->  [[int T]]
+;; o-zip-with-index :: [T] -> [[int T]]
 (defun o-zip-with-index (lst)
   (o-zip (o-range (length lst)) lst))
+
+
+;; o-zip-with :: (T -> U -> V) -> [T] -> [U] -> [V]
+(defun o-zip-with (f lst1 lst2)
+  (o-map
+   (lambda (sublst)
+     (apply f sublst))
+   (o-zip lst1 lst2)))
+
+(o-zip-with '+ '(3 1 2) '(0 5 4))
 
 
 ;; o-enumerate :: [T] -> [[integer . T]]

@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
 ;; Modified: April 14, 2024
-;; Version: 0.7.7
+;; Version: 0.7.8
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -21,7 +21,9 @@
 ;;
 ;;; Code:
 
-(load-file "~/repos/othello/src/othello.el") ; load Othello language
+; load Othello language
+(add-to-list 'load-path "~/repos/othello/src/")
+(require 'othello)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -239,6 +241,16 @@
    (concat error-prelude "error: zip-with-index test(s) failed")))
 
 
+(defun othello-test-zip-with (error-prelude)
+  (o-assert-equal
+   (o-zip-with
+    '+
+    '(3 1 2 5 4)
+    '(0 1 2 3))
+   '(3 2 4 8)
+   (concat error-prelude "error: zip test(s) failed")))
+
+
 (defun othello-test-enumerate-partition (error-prelude)
   (o-assert-equal
     (o-enumerate '(3 1 2 5 4))
@@ -410,6 +422,7 @@
   'othello-test-drop-take
   'othello-test-slice
   'othello-test-zip
+  'othello-test-zip-with
   'othello-test-enumerate-partition
   'othello-test-tally
   'othello-test-o-begin
