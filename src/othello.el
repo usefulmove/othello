@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: April 14, 2024
-;; Version: 0.7.10
+;; Version: 0.7.11
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -137,9 +137,8 @@ permutations to generate list of mapped results."
 
 
 ;; o-id :: T -> T
-(defun o-id (object) object)
-(defmacro o-identity (object)
-  `(o-id ,object))
+(defun o-identity(object)
+  (o-id object))
 
 
 ;; o-id-msg :: T -> T (impure)
