@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 12, 2024
-;; Version: 0.7.6
+;; Modified: April 14, 2024
+;; Version: 0.7.7
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -393,8 +393,8 @@ The resulting zipped association list will have the same length as the shortest
 of the two provided lists."
   (cond ((or (null lst1)
              (null lst2)) '())
-        (t (cons (cons (car lst1)
-                       (list (car lst2)))
+        (t (cons (list (car lst1)
+                       (car lst2))
                  (o-zip (cdr lst1)
                         (cdr lst2))))))
 
