@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: April 14, 2024
-;; Version: 0.7.9
+;; Version: 0.7.10
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -24,8 +24,7 @@
 (require 'cl-lib)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; macros
+(setq o-else t)
 
 
 ;; o-not= :: T -> U -> V -> ... -> boolean
@@ -136,9 +135,6 @@ permutations to generate list of mapped results."
          (o-for ,remaining-bindings ,@body)))))
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; functions
 
 ;; o-id :: T -> T
 (defun o-id (object) object)
@@ -315,6 +311,12 @@ list (LST) returns true."
 (defun o-last (lst)
   "Return the last element of the list (LST)."
   (car (reverse lst)))
+
+
+;; o-tail :: [T] -> [T]
+(defmacro o-tail (lst)
+  "Test that objects are not numerically equal."
+  `(cdr ,lst))
 
 
 ;; o-join-chars :: [char] -> string
@@ -514,12 +516,6 @@ specified indicies (INDS)."
 ;; o-adjacent-map :: [T] -> (T -> U) -> [U]
 (defun o-adjacent-map (f lst)
   (o-zip-with f (o-init lst) (cdr lst)))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; definitions
-
-(setq o-else t)
 
 
 
