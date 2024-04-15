@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: April 14, 2024
-;; Version: 0.7.8
+;; Version: 0.7.9
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -513,10 +513,7 @@ specified indicies (INDS)."
 
 ;; o-adjacent-map :: [T] -> (T -> U) -> [U]
 (defun o-adjacent-map (f lst)
-  (o-map
-   (lambda (sublst) (message (apply 'format "%d %d" sublst)) (apply f sublst))
-   (o-zip (o-init lst)
-          (cdr lst))))
+  (o-zip-with f (o-init lst) (cdr lst)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
