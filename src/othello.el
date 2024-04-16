@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 14, 2024
-;; Version: 0.7.11
+;; Modified: April 16, 2024
+;; Version: 0.7.13
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -24,8 +24,7 @@
 (require 'cl-lib)
 
 
-(setq o-else t)
-
+;;; ( predicates )
 
 ;; o-not= :: T -> U -> V -> ... -> boolean
 (defmacro o-not= (&rest args)
@@ -63,10 +62,17 @@
   `(not (null ,a)))
 
 
+;; o-false-p :: T -> boolean
+(defmacro o-false-p (a)
+  "Test that object A is false."
+  `(null ,a))
+
+
 ;; o-null-p :: T -> boolean
 (defmacro o-null-p (a)
   "Test that object A is not null."
   `(null ,a))
+
 
 ;; o-contains-p :: T -> [T] -> boolean
 (defmacro o-contains-p (a lst)
@@ -76,6 +82,50 @@
 ;; o-empty-p :: [T] -> boolean
 (defmacro o-empty-p (a)
   `(null ,a))
+
+
+;; o-all-p :: (T -> boolean) -> [T] -> boolean
+(defun o-all-p (f lst)
+  "Check that function applied to all values in the list returns true."
+  (cond ((null lst) t)
+        ((not (funcall f (car lst))) nil)
+        (t (o-all-p f (cdr lst)))))
+
+
+;; o-any-p :: (T -> boolean) -> [T] -> boolean
+(defun o-any-p (f lst)
+  "Check that function (F) applied to at least one value in the
+list (LST) returns true."
+  (cond ((null lst) nil)
+        ((funcall f (car lst)) t)
+        (t (o-any-p f (cdr lst)))))
+
+
+;; o-even-p :: number -> boolean
+(defun o-even-p (n)
+  "Is N even?"
+  (= 0 (mod n 2)))
+
+
+;; o-odd-p :: number -> boolean
+(defun o-odd-p (n)
+  "Is N odd?"
+  (= 1 (mod n 2)))
+
+
+;; o-zero-p :: number -> boolean
+(defun o-zero-p (n)
+  "Is N equal to zero?"
+  (= 0 n))
+
+
+;; o-ascii-numeric-p :: char -> boolean
+(defun o-ascii-numeric-p (c)
+  "Check is C a valid ascii numeric character?"
+  (and (>= c ?0) (<= c ?9)))
+
+
+;;; ( miscellaneous )
 
 
 ;; o-call
@@ -136,13 +186,8 @@ permutations to generate list of mapped results."
 
 
 
-;; o-id :: T -> T
-(defun o-identity(object)
-  (o-id object))
-
-
-;; o-id-msg :: T -> T (impure)
-(defun o-id-msg (object)
+;; o-id-debug :: T -> T (impure)
+(defun o-id-debug (object)
   (message (prin1-to-string object))
   object)
 
@@ -247,30 +292,6 @@ of function application is reversed from the o-compose function."
   (- n 1))
 
 
-;; o-even-p :: number -> boolean
-(defun o-even-p (n)
-  "Is N even?"
-  (= 0 (mod n 2)))
-
-
-;; o-odd-p :: number -> boolean
-(defun o-odd-p (n)
-  "Is N odd?"
-  (= 1 (mod n 2)))
-
-
-;; o-zero-p :: number -> boolean
-(defun o-zero-p (n)
-  "Is N equal to zero?"
-  (= 0 n))
-
-
-;; o-ascii-numeric-p :: char -> boolean
-(defun o-ascii-numeric-p (c)
-  "Check is C a valid ascii numeric character?"
-  (and (>= c ?0) (<= c ?9)))
-
-
 ;; o-sum :: [T] -> T
 (defun o-sum (lst)
   "Sum elements of list (LST)."
@@ -281,23 +302,6 @@ of function application is reversed from the o-compose function."
 (defun o-product (lst)
   "Calculate the product of elements of list (LST)."
   (apply '* lst))
-
-
-;; o-all-p :: (T -> boolean) -> [T] -> boolean
-(defun o-all-p (f lst)
-  "Check that function applied to all values in the list returns true."
-  (cond ((null lst) t)
-        ((not (funcall f (car lst))) nil)
-        (t (o-all-p f (cdr lst)))))
-
-
-;; o-any-p :: (T -> boolean) -> [T] -> boolean
-(defun o-any-p (f lst)
-  "Check that function (F) applied to at least one value in the
-list (LST) returns true."
-  (cond ((null lst) nil)
-        ((funcall f (car lst)) t)
-        (t (o-any-p f (cdr lst)))))
 
 
 ;; o-init :: [T] -> [T]
@@ -515,6 +519,9 @@ specified indicies (INDS)."
 ;; o-adjacent-map :: [T] -> (T -> U) -> [U]
 (defun o-adjacent-map (f lst)
   (o-zip-with f (o-init lst) (cdr lst)))
+
+
+(setq o-else t)
 
 
 

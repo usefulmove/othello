@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 14, 2024
-;; Version: 0.7.10
+;; Modified: April 16, 2024
+;; Version: 0.7.13
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -107,7 +107,6 @@
                         (lambda (a) (- a 1))
                         (lambda (a) (/ a 2)))
     (o-call (o-pipe
-             'o-id
              'sqrt
              (lambda (a) (- a 1))
              (lambda (a) (/ a 2)))
@@ -382,6 +381,10 @@
    (o-true-p nil)
    nil
    (concat error-prelude "error: true-p test(s) failed"))
+  (o-assert-equal
+   (o-false-p nil)
+   t
+   (concat error-prelude "error: false-p test(s) failed"))
   (o-assert-equal
    (o-empty-p '())
    t
