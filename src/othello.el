@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: April 16, 2024
-;; Version: 0.8.14
+;; Version: 0.8.15
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -193,13 +193,11 @@ permutations to generate list of mapped results."
 
 
 ;; o-fold-left :: (U -> T -> U) -> U -> [T] -> U
-(defun o-fold-left (f acc lst)
+(defmacro o-fold-left (f acc lst)
   "Fold (reduce) list (LST) using applied function F starting with initial value
 ACC for the accumulator. Fold right (o-fold-right) works in the opposite
 direction through the list compared with fold left (o-fold-left)."
-  (cond ((null lst) acc)
-        (t (o-fold-left f (funcall f acc (car lst)) (cdr lst)))))
-
+  `(seq-reduce ,f ,lst ,acc))
 
 ;; fold :: (U -> T -> U) -> U -> [T] -> U
 (fset 'fold 'o-fold-left)
