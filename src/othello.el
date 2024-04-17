@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: April 16, 2024
-;; Version: 0.7.13
+;; Version: 0.8.14
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -444,8 +444,8 @@ which F returns nil (false)."
     lst))
 
 
-;; o-tally :: [T] -> [T . integer]
-(defun o-tally (lst &optional o-map)
+;; o-count-elements :: [T] -> [T . integer]
+(defun o-count-elements (lst &optional o-map)
   "Count elements in list (LST) and return an association list with
 key-count pairs."
   (setq counts-hash (if o-map
@@ -457,7 +457,7 @@ key-count pairs."
      (car lst)
      (+ 1 (gethash (car lst) counts-hash 0))
      counts-hash)
-    (o-tally (cdr lst) counts-hash)) ; recursively run on rest of list
+    (o-count-elements (cdr lst) counts-hash)) ; recursively process tail of list
 
   (let ((counts '()))
     (maphash ; convert hash table to association list
@@ -512,7 +512,7 @@ specified indicies (INDS)."
 ;; o-remove-duplicates :: [T] -> [T]
 (defun o-remove-duplicates (lst)
   "Remove duplicates from list (LST)."
-  (let ((counts (o-tally lst)))
+  (let ((counts (o-count-elements lst)))
     (o-map 'car counts)))
 
 

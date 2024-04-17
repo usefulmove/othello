@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
 ;; Modified: April 16, 2024
-;; Version: 0.7.13
+;; Version: 0.8.14
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -15,15 +15,14 @@
 ;;
 ;;; Commentary:
 ;;
-;;  Description: Othello unit tests
+;;  Description: Othello library unit tests
 ;;
 ;;  Source code: ~/repos/othello/src/othello.el
 ;;
 ;;; Code:
 
-; load Othello language
-(add-to-list 'load-path "~/repos/othello/src/")
-(require 'othello)
+; load Othello library
+(load-file "~/repos/othello/src/othello.el")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -261,7 +260,7 @@
     (concat error-prelude "error: enumerate test(s) failed")))
 
 
-(defun othello-test-tally (error-prelude)
+(defun othello-test-count-elements (error-prelude)
   (o-assert-equal
     (let ((s "As twilight cascaded upon the horizon, the iridescent hues of
               amaranthine skies caressed the gentle whispers of the zephyr,
@@ -270,7 +269,7 @@
               harmony.")
           (get-count (lambda (key counts)
                        (o-tail (assoc key counts)))))
-      (o-call get-count ?e (o-tally (string-to-list s))))
+      (o-call get-count ?e (o-count-elements (string-to-list s))))
     33
     (concat error-prelude "error: drop test(s) failed")))
 
@@ -427,7 +426,7 @@
   'othello-test-zip
   'othello-test-zip-with
   'othello-test-enumerate-partition
-  'othello-test-tally
+  'othello-test-count-elements
   'othello-test-o-begin
   'othello-test-for-comprehension
   'othello-test-equality
