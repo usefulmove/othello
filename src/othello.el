@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 16, 2024
-;; Version: 0.8.15
+;; Modified: April 19, 2024
+;; Version: 0.8.16
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -405,6 +405,11 @@ of the two provided lists."
 ;; o-zip-with-index :: [T] -> [[int T]]
 (defun o-zip-with-index (lst)
   (o-zip (o-range (length lst)) lst))
+
+
+;; o-enumerate :: [T] -> [[int T]]
+(defmacro o-enumerate (lst)
+  `(o-zip-with-index lst))
 
 
 ;; o-zip-with :: (T -> U -> V) -> [T] -> [U] -> [V]

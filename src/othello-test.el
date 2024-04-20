@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 16, 2024
-;; Version: 0.8.14
+;; Modified: April 19, 2024
+;; Version: 0.8.16
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -236,7 +236,11 @@
   (o-assert-equal
    (o-zip-with-index (make-list 9 0))
    '((0 0) (1 0) (2 0) (3 0) (4 0) (5 0) (6 0) (7 0) (8 0))
-   (concat error-prelude "error: zip-with-index test(s) failed")))
+   (concat error-prelude "error: zip-with-index test(s) failed"))
+  (o-assert-equal
+   (o-enumerate (make-list 9 0))
+   '((0 0) (1 0) (2 0) (3 0) (4 0) (5 0) (6 0) (7 0) (8 0))
+   (concat error-prelude "error: enumerate test(s) failed")))
 
 
 (defun othello-test-zip-with (error-prelude)
