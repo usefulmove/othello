@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 19, 2024
-;; Version: 0.8.16
+;; Modified: April 22, 2024
+;; Version: 0.8.18
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -400,6 +400,25 @@
    (concat error-prelude "error: adjacent-map test(s) failed")))
 
 
+(defun othello-test-when (error-prelude)
+  (o-assert-equal
+   (o-when t 'success)
+   'success
+   (concat error-prelude "error: when test(s) failed"))
+  (o-assert-equal
+   (o-when nil 'success)
+   nil
+   (concat error-prelude "error: when test(s) failed"))
+  (o-assert-equal
+   (o-when-not t 'success)
+   nil
+   (concat error-prelude "error: when test(s) failed"))
+  (o-assert-equal
+   (o-when-not nil 'success)
+   'success
+   (concat error-prelude "error: when test(s) failed")))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; run unit tests
 
@@ -437,7 +456,8 @@
   'othello-test-chars
   'othello-test-impure
   'othello-test-logic
-  'othello-test-adjacent-map)
+  'othello-test-adjacent-map
+  'othello-test-when)
 
 
 

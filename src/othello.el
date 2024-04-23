@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 19, 2024
-;; Version: 0.8.16
+;; Modified: April 22, 2024
+;; Version: 0.8.18
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -33,9 +33,7 @@
 
 
 ;; o-equal-p :: T -> U -> boolean
-(defmacro o-equal-p (a b)
-  "Test that objects A and B have equal components."
-  `(equal ,a ,b))
+(fset 'o-equal-p #'equal)
 
 
 ;; o-not-equal-p :: T -> U -> boolean
@@ -45,9 +43,7 @@
 
 
 ;; o-eq-p :: T -> U -> boolean
-(defmacro o-eq-p (a b)
-  "Test that objects A and B are the same object."
-  `(eq ,a ,b))
+(fset 'o-eq-p #'eq)
 
 
 ;; o-not-eq-p :: T -> U -> boolean
@@ -63,25 +59,20 @@
 
 
 ;; o-false-p :: T -> boolean
-(defmacro o-false-p (a)
-  "Test that object A is false."
-  `(null ,a))
+(fset 'o-false-p #'null)
 
 
 ;; o-null-p :: T -> boolean
-(defmacro o-null-p (a)
-  "Test that object A is not null."
-  `(null ,a))
+(fset 'o-null-p #'null)
+
+
+;; o-empty-p :: [T] -> boolean
+(fset 'o-empty-p #'null)
 
 
 ;; o-contains-p :: T -> [T] -> boolean
 (defmacro o-contains-p (a lst)
   `(o-true-p (member ,a ,lst)))
-
-
-;; o-empty-p :: [T] -> boolean
-(defmacro o-empty-p (a)
-  `(null ,a))
 
 
 ;; o-all-p :: (T -> boolean) -> [T] -> boolean
@@ -134,14 +125,13 @@ list (LST) returns true."
 
 
 ;; o-assert-equal :: sexp -> sexp -> string -> nil (IMPURE)
-(defmacro o-assert-equal (exp1 exp2 error-msg)
-  `(when (not (equal ,exp1 ,exp2))
+(defmacro o-assert-equal (sexp1 sexp2 error-msg)
+  `(when (not (equal ,sexp1 ,sexp2))
   (error ,error-msg)))
 
 
 ;; o-map :: (T -> U) -> [T] -> [U]
-(defmacro o-map (f lst)
-  `(mapcar ,f ,lst))
+(fset 'o-map #'mapcar)
 
 
 ;; o-filter :: (T -> boolean) -> [T] -> [T]
@@ -150,13 +140,14 @@ list (LST) returns true."
 
 
 ;; o-flatten :: [[T]] -> [T]
-(fset 'o-flatten '-flatten)
+(fset 'o-flatten #'-flatten)
 
 
 ;; o-begin
-(defmacro o-begin (&rest forms)
-  "Evaluate body FORMS sequentially and return value of the last one."
-  `(let () ,@forms))
+(defmacro o-begin (&rest sexps)
+  "Evaluate body S-expressions (SEXPS) sequentially and return value of the
+last one. Similar to `progn'"
+  `(let () ,@sexps))
 
 
 ;; o-for-comp
@@ -185,7 +176,6 @@ permutations to generate list of mapped results."
          (o-for ,remaining-bindings ,@body)))))
 
 
-
 ;; o-id-debug :: T -> T (impure)
 (defun o-id-debug (object)
   (message (prin1-to-string object))
@@ -199,8 +189,8 @@ ACC for the accumulator. Fold right (o-fold-right) works in the opposite
 direction through the list compared with fold left (o-fold-left)."
   `(seq-reduce ,f ,lst ,acc))
 
-;; fold :: (U -> T -> U) -> U -> [T] -> U
-(fset 'fold 'o-fold-left)
+;; o-fold :: (U -> T -> U) -> U -> [T] -> U
+(fset 'o-fold #'o-fold-left)
 
 
 ;; o-fold-right :: (U -> T -> U) -> U -> [T] -> U
@@ -315,9 +305,7 @@ of function application is reversed from the o-compose function."
 
 
 ;; o-tail :: [T] -> [T]
-(defmacro o-tail (lst)
-  "Test that objects are not numerically equal."
-  `(cdr ,lst))
+(fset 'o-tail #'cdr)
 
 
 ;; o-join-chars :: [char] -> string
@@ -408,8 +396,7 @@ of the two provided lists."
 
 
 ;; o-enumerate :: [T] -> [[int T]]
-(defmacro o-enumerate (lst)
-  `(o-zip-with-index lst))
+(fset 'o-enumerate #'o-zip-with-index)
 
 
 ;; o-zip-with :: (T -> U -> V) -> [T] -> [U] -> [V]
@@ -418,8 +405,6 @@ of the two provided lists."
    (lambda (sublst)
      (apply f sublst))
    (o-zip lst1 lst2)))
-
-(o-zip-with '+ '(3 1 2) '(0 5 4))
 
 
 ;; o-enumerate :: [T] -> [[integer . T]]
@@ -524,6 +509,17 @@ specified indicies (INDS)."
   (o-zip-with f (o-init lst) (cdr lst)))
 
 
+;; o-when
+(defmacro o-when (condition &rest sexps)
+  `(when ,condition ,@sexps))
+
+
+;; o-when-not
+(defmacro o-when-not (condition &rest sexps)
+  `(unless ,condition ,@sexps))
+
+
+;; o-else
 (setq o-else t)
 
 
