@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 22, 2024
-;; Version: 0.8.18
+;; Modified: April 24, 2024
+;; Version: 0.8.19
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -173,7 +173,7 @@
     (concat error-prelude "error: fold-left test(s) failed"))
   (let ((input "this is a test"))
     (o-assert-equal
-      (fold
+      (o-fold
         (lambda (acc a)
                (concat acc (o-join-chars (list a))))
         ""

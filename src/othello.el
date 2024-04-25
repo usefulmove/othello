@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 22, 2024
-;; Version: 0.8.18
+;; Modified: April 24, 2024
+;; Version: 0.8.19
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -244,20 +244,22 @@ of function application is reversed from the o-compose function."
     (lambda (b) (funcall f a b))))
 
 
-;; o-range :: number -> (optional) number -> [number]
+;; o-range :: integer -> (optional) integer -> (optional) integer -> [integer]
 (defun o-range (&rest args)
-  "Generate a list of values from FROM (inclusive) to TO (non-inclusive)."
-  (let ((from (if (= 1 (length args))
-                  0
-                (car args)))
-        (to (if (= 1 (length args))
-                (car args)
-              (cadr args)))
-        (step (if (= 3 (length args))
-                  (caddr args)
-                1)))
-    (cond ((>= from to) '())
-          (t (cons from (o-range (+ step from) to step))))))
+  "Generate a list of values from FROM (inclusive, optional) to TO
+(non-inclusive) by STEP (optional). All arguments should be positive integers.
+If only one argument is provided. The list provided will start at zero and end
+at the provided TO (non-inclusive)."
+  (let ((n-args (length args)))
+    (cond ((= 0 n-args) (number-sequence 0))
+          ((= 1 n-args) (number-sequence 0 (- (abs (car args)) 1)))
+          ((= 2 n-args) (number-sequence
+                         (abs (car args))
+                         (- (abs (cadr args)) 1)))
+          (t (number-sequence
+              (car args)
+              (- (abs (cadr args)) 1)
+              (abs (caddr args)))))))
 
 
 ;; o-for-each :: (T -> ?) -> [T] -> nil (IMPURE)
