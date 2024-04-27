@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 26, 2024
-;; Version: 0.9.20
+;; Modified: April 27, 2024
+;; Version: 0.9.21
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -299,30 +299,21 @@
   (should (o-empty-p '())))
 
 
-(defun othello-test-adjacent-map (error-prelude)
-  (o-assert-equal
-   (o-adjacent-map '* '(3 1 2 0 5 4))
-   '(3 2 0 0 20)
-   (concat error-prelude "error: adjacent-map test(s) failed")))
+(ert-deftest othello-test-adjacent-map ()
+  (should (equal 
+           (o-adjacent-map '* '(3 1 2 0 5 4))
+           '(3 2 0 0 20))))
 
 
-(defun othello-test-when (error-prelude)
-  (o-assert-equal
-   (o-when t 'success)
-   'success
-   (concat error-prelude "error: when test(s) failed"))
-  (o-assert-equal
-   (o-when nil 'success)
-   nil
-   (concat error-prelude "error: when test(s) failed"))
-  (o-assert-equal
-   (o-when-not t 'success)
-   nil
-   (concat error-prelude "error: when test(s) failed"))
-  (o-assert-equal
-   (o-when-not nil 'success)
-   'success
-   (concat error-prelude "error: when test(s) failed")))
+(ert-deftest othello-test-when ()
+  (should (equal 
+           (o-when t 'success)
+           'success))
+  (should-not (o-when nil 'success))
+  (should-not (o-when-not t 'success))
+  (should (equal 
+           (o-when-not nil 'success)
+           'success)))
 
 
 
