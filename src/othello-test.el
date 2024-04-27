@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 24, 2024
-;; Version: 0.8.19
+;; Modified: April 26, 2024
+;; Version: 0.9.20
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -28,101 +28,72 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; test definitions
 
-(defun othello-test-compound (error-prelude)
-  (when (not (o-zero-p (- 204 (o-sum (o-map
-                                  (lambda (a) (* a a))
-                                  (o-range (o-inc 8)))))))
-    (error (concat error-prelude "error: compound (1) test(s) failed")))
-  (o-assert-equal
-    (o-call (o-memoize 'o-inc) 8)
-    9
-    (error (concat error-prelude "error: compound (1) test(s) failed")))
-  (o-assert-equal
-    (o-range 1 3)
-    '(1 2)
-    (error (concat error-prelude "error: compound (1) test(s) failed")))
-  (o-assert-equal
-    (o-range 100 (o-inc 200) 20)
-    '(100 120 140 160 180 200)
-    (error (concat error-prelude "error: compound (1) test(s) failed"))))
+(ert-deftest othello-test-compound ()
+  (should (= (o-sum (o-map
+                     (lambda (a) (* a a))
+                     (o-range (o-inc 8))))
+             204))
+  (should (= (o-call (o-memoize 'o-inc) 8)
+             9))
+  (should (equal (o-range 1 3)
+                 '(1 2)))
+  (should (equal (o-range 100 (o-inc 200) 20)
+                 '(100 120 140 160 180 200))))
+
+(ert-deftest othello-test-compound2 ()
+  (should (= (o-product (o-filter 'o-odd-p (o-map
+                                            (lambda (a) (* a a a))
+                                            (o-range (o-dec 10)))))
+             1157625))
+  (should (equal (o-init '(3 1 2))
+                 '(3 1)))
+  (should (= (o-last '(3 1 2))
+             2))
+  (should (eq (o-all-p 'o-even-p (o-map
+                                  (lambda (a) (* 2 a))
+                                  (o-range (o-inc 31))))
+              t))
+  (should (= (o-gcd 18 30 12)
+             6))
+  (should (eq (not (o-any-p 'o-ascii-numeric-p (list 46 47 58 59)))
+              (o-all-p 'o-ascii-numeric-p (list ?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))))
+  (should (equal (o-flatten '(3 1 (2 1 2)))
+                 '(3 1 2 1 2))))
 
 
-(defun othello-test-compound2 (error-prelude)
-  (o-assert-equal
-    (o-product (o-filter 'o-odd-p (o-map
-                          (lambda (a) (* a a a))
-                          (o-range (o-dec 10)))))
-    1157625
-    (concat error-prelude "error: compound (2) test(s) failed"))
-  (o-assert-equal
-    (o-init '(3 1 2))
-    '(3 1)
-    (concat error-prelude "error: compound (2) test(s) failed"))
-  (o-assert-equal
-    (o-last '(3 1 2))
-    2
-    (concat error-prelude "error: compound (2) test(s) failed"))
-  (o-assert-equal
-    (o-all-p 'o-even-p (o-map
-                   (lambda (a) (* 2 a))
-                   (o-range (o-inc 31))))
-    t
-    (concat error-prelude "error: compound (2) test(s) failed"))
-  (o-assert-equal
-   (o-gcd 18 30 12)
-    6
-    (concat error-prelude "error: compound (2) test(s) failed"))
-  (o-assert-equal
-    (not (o-any-p 'o-ascii-numeric-p (list 46 47 58 59)))
-    (o-all-p 'o-ascii-numeric-p (list ?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-    (concat error-prelude "error: compound (2) test(s) failed"))
-  (o-assert-equal
-    (o-flatten '(3 1 (2 1 2)))
-    '(3 1 2 1 2)
-    (concat error-prelude "error: compound (2) test(s) failed")))
+(ert-deftest othello-test-compound3 ()
+  (should-not (o-any-p 'o-even-p '(3 1 5 9 7)))
+  (should (equal (o-remove-duplicates '(8 1 2 8 5 4 0 8))
+                 '(8 1 2 5 4 0)))
+  (should (eq (o-contains-p 0 '(3 1 2 0 5 4))
+              t))
+  (should (eq (o-contains-p 0 '(3 1 2 5 4))
+              nil)))
 
 
-(defun othello-test-compound3 (error-prelude)
-  (when (o-any-p 'o-even-p '(3 1 5 9 7))
-    (error (concat error-prelude "error: compound (3) test(s) failed")))
-  (o-assert-equal
-    (o-remove-duplicates '(8 1 2 8 5 4 0 8))
-    '(8 1 2 5 4 0)
-    (concat error-prelude "error: compound (3) test(s) failed"))
-  (o-assert-equal
-   (o-contains-p 0 '(3 1 2 0 5 4))
-   t
-   (concat error-prelude "error: compound (3) test(s) failed"))
-  (o-assert-equal
-   (o-contains-p 0 '(3 1 2 5 4))
-   nil
-   (concat error-prelude "error: compound (3) test(s) failed")))
+(ert-deftest othello-test-function-composition ()
+  (should (equal (o-thread
+                  5
+                  'sqrt
+                  (lambda (a) (- a 1))
+                  (lambda (a) (/ a 2)))
+                 (o-call (o-pipe
+                          'sqrt
+                          (lambda (a) (- a 1))
+                          (lambda (a) (/ a 2)))
+                         5))))
 
 
-(defun othello-test-function-composition (error-prelude)
-  (when (o-not-equal-p (o-thread
-                        5
-                        'sqrt
-                        (lambda (a) (- a 1))
-                        (lambda (a) (/ a 2)))
-    (o-call (o-pipe
-             'sqrt
-             (lambda (a) (- a 1))
-             (lambda (a) (/ a 2)))
-     5))
-    (error (concat error-prelude "error: function composition (1) test(s) failed"))))
-
-
-(defun othello-test-function-composition2 (error-prelude)
-  (when (o-not= (o-thread 5
-                'sqrt
-                (lambda (a) (- a 1))
-                (lambda (a) (/ a 2)))
-              (o-call (o-compose (lambda (a) (/ a 2))
-                             (lambda (a) (- a 1))
-                             'sqrt)
-               5))
-    (error (concat error-prelude "error: function composition (2) test(s) failed"))))
+(ert-deftest othello-test-function-composition2 ()
+  (should (equal (o-thread
+                  5
+                  'sqrt
+                  (lambda (a) (- a 1))
+                  (lambda (a) (/ a 2)))
+                 (o-call (o-compose (lambda (a) (/ a 2))
+                                    (lambda (a) (- a 1))
+                                    'sqrt)
+                         5))))
 
 
 (defun othello-test-string-o-join (error-prelude)
@@ -431,33 +402,6 @@
     (message (concat prelude "running tests..."))
     (o-call execute-tests tests)
     (message (concat prelude "passed all tests"))))
-
-
-(othello-test-run-tests
-  'othello-test-compound
-  'othello-test-compound2
-  'othello-test-compound3
-  'othello-test-function-composition
-  'othello-test-function-composition2
-  'othello-test-string-o-join
-  'othello-test-curry
-  'othello-test-partial
-  'othello-test-fold-left
-  'othello-test-fold-right
-  'othello-test-drop-take
-  'othello-test-slice
-  'othello-test-zip
-  'othello-test-zip-with
-  'othello-test-enumerate-partition
-  'othello-test-count-elements
-  'othello-test-o-begin
-  'othello-test-for-comprehension
-  'othello-test-equality
-  'othello-test-chars
-  'othello-test-impure
-  'othello-test-logic
-  'othello-test-adjacent-map
-  'othello-test-when)
 
 
 
