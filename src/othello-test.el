@@ -192,29 +192,26 @@
                  '(3 2 4 8))))
 
 
-(defun othello-test-enumerate-partition (error-prelude)
-  (o-assert-equal
-    (o-enumerate '(3 1 2 5 4))
-    '((0 3) (1 1) (2 2) (3 5) (4 4))
-    (concat error-prelude "error: enumerate test(s) failed"))
-  (o-assert-equal
-    (o-partition 'o-odd-p '(8 1 2 0 3 5 4 6))
-    '((5 3 1) (6 4 0 2 8))
-    (concat error-prelude "error: enumerate test(s) failed")))
+(ert-deftest othello-test-enumerate-partition ()
+  (should (equal 
+           (o-enumerate '(3 1 2 5 4))
+           '((0 3) (1 1) (2 2) (3 5) (4 4))))
+  (should (equal 
+           (o-partition 'o-odd-p '(8 1 2 0 3 5 4 6))
+           '((5 3 1) (6 4 0 2 8)))))
 
 
-(defun othello-test-count-elements (error-prelude)
-  (o-assert-equal
-    (let ((s "As twilight cascaded upon the horizon, the iridescent hues of
-              amaranthine skies caressed the gentle whispers of the zephyr,
-              weaving an ephemeral symphony of love that intertwined the souls
-              of all living beings in the tender embrace of nature's eternal
-              harmony.")
-          (get-count (lambda (key counts)
-                       (o-tail (assoc key counts)))))
-      (o-call get-count ?e (o-count-elements (string-to-list s))))
-    33
-    (concat error-prelude "error: drop test(s) failed")))
+(ert-deftest othello-test-count-elements ()
+  (should (equal 
+           (let ((s "As twilight cascaded upon the horizon, the iridescent hues of
+                     amaranthine skies caressed the gentle whispers of the zephyr,
+                     weaving an ephemeral symphony of love that intertwined the souls
+                     of all living beings in the tender embrace of nature's eternal
+                     harmony.")
+                 (get-count (lambda (key counts)
+                              (o-tail (assoc key counts)))))
+             (o-call get-count ?e (o-count-elements (string-to-list s))))
+           33)))
 
 
 (ert-deftest othello-test-o-begin ()
