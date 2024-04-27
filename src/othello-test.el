@@ -266,23 +266,17 @@
            56)))
 
 
-(defun othello-test-impure (error-prelude)
+(ert-deftest othello-test-impure ()
   (let ((n 0))
     (o-for-each
       (lambda (a)
         (setq n (+ n (* a a))))
       '(3 1 2 0 5 4))
-    (o-assert-equal
-      n
-      55
-      (concat error-prelude "error: impure test(s) failed")))
+    (should (= n 55)))
   (let ((n 0))
     (o-for ((a '(3 1 2 0 5 4)))
       (setq n (+ n (* a a))))
-    (o-assert-equal
-      n
-      55
-      (concat error-prelude "error: impure test(s) failed"))))
+    (should (= n 55))))
 
 
 (defun othello-test-o-list-ref (error-prelude)
