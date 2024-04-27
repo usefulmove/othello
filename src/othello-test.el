@@ -279,20 +279,17 @@
     (should (= n 55))))
 
 
-(defun othello-test-o-list-ref (error-prelude)
-  (o-assert-equal
-    (o-list-ref '(3 1 2 0 5) 2)
-    2
-    (concat error-prelude "error: list-ref test(s) failed"))
-  (o-assert-equal
-    (o-list-ref '((8 1 2)
-                 (0 5 4)) 1 2)
-    4
-    (concat error-prelude "error: list-ref test(s) failed"))
-  (o-assert-equal
-    (o-list-ref '(8 1 2) 0)
-    8
-    (concat error-prelude "error: list-ref test(s) failed")))
+(ert-deftest othello-test-o-list-ref ()
+  (should (equal
+           (o-list-ref '(3 1 2 0 5) 2)
+           2))
+  (should (equal 
+           (o-list-ref '((8 1 2)
+                         (0 5 4)) 1 2)
+           4))
+  (should (equal 
+           (o-list-ref '(8 1 2) 0)
+           8)))
 
 
 (defun othello-test-logic (error-prelude)
