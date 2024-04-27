@@ -292,23 +292,12 @@
            8)))
 
 
-(defun othello-test-logic (error-prelude)
-  (o-assert-equal
-   (o-true-p t)
-   t
-   (concat error-prelude "error: true-p test(s) failed"))
-  (o-assert-equal
-   (o-true-p nil)
-   nil
-   (concat error-prelude "error: true-p test(s) failed"))
-  (o-assert-equal
-   (o-false-p nil)
-   t
-   (concat error-prelude "error: false-p test(s) failed"))
-  (o-assert-equal
-   (o-empty-p '())
-   t
-   (concat error-prelude "error: empty-p test(s) failed")))
+(ert-deftest othello-test-logic ()
+  (should (o-true-p t))
+  (should-not (o-true-p nil))
+  (should (o-false-p nil))
+  (should (o-empty-p '())))
+
 
 (defun othello-test-adjacent-map (error-prelude)
   (o-assert-equal
