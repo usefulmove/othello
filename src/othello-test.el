@@ -96,80 +96,62 @@
                          5))))
 
 
-(defun othello-test-string-o-join (error-prelude)
-  (o-assert-equal
-    (o-join '("3" "1" "2" "5" "4"))
-    "31254"
-    (concat error-prelude "error: string join test(s) failed"))
-  (o-assert-equal
-    (o-join '("3" "1" "2" "5" "4") ", ")
-    "3, 1, 2, 5, 4"
-    (concat error-prelude "error: string join test(s) failed"))
+(ert-deftest othello-test-string-o-join ()
+  (should (equal (o-join '("3" "1" "2" "5" "4"))
+                 "31254"))
+  (should (equal (o-join '("3" "1" "2" "5" "4") ", ")
+                 "3, 1, 2, 5, 4"))
   (let ((s "desafortunadamente"))
-    (o-assert-equal
-      (o-thread s
-        'string-to-list
-        'reverse
-        'o-join-chars)
-      (reverse s)
-      (concat error-prelude "error: string join test(s) failed"))))
+    (should (equal (o-thread
+                    s
+                    'string-to-list
+                    'reverse
+                    'o-join-chars)
+                   (reverse s)))))
 
 
-(defun othello-test-curry (error-prelude)
+(ert-deftest othello-test-curry ()
   (letrec ((square (lambda (a) (* a a)))
            (o-sum-squares (lambda (a b)
                           (sqrt (+ (o-call square a)
                                    (o-call square b))))))
-    (o-assert-equal
-      (o-call o-sum-squares 3 4)
-      (o-call (o-call (o-curry2 o-sum-squares) 3) 4)
-      (concat error-prelude "error: curry test(s) failed"))))
+    (should (equal (o-call o-sum-squares 3 4)
+                   (o-call (o-call (o-curry2 o-sum-squares) 3) 4)))))
 
 
-(defun othello-test-partial (error-prelude)
+(ert-deftest othello-test-partial ()
   (letrec ((square (lambda (a) (* a a)))
            (o-sum-squares (lambda (a b)
                           (sqrt (+ (o-call square a)
                                    (o-call square b))))))
-    (o-assert-equal
-      (o-call o-sum-squares 3 4)
-      (o-call (o-partial o-sum-squares 3) 4)
-      (concat error-prelude "error: partial test(s) failed"))))
+    (should (equal (o-call o-sum-squares 3 4)
+                   (o-call (o-partial o-sum-squares 3) 4)))))
 
 
-(defun othello-test-fold-left (error-prelude)
-  (o-assert-equal
-    (o-fold-left (lambda (acc a) (+ acc (* a a))) 0 (o-range (o-inc 8)))
-    204
-    (concat error-prelude "error: fold-left test(s) failed"))
+(ert-deftest othello-test-fold-left ()
+  (should (equal (o-fold-left (lambda (acc a) (+ acc (* a a))) 0 (o-range (o-inc 8)))
+                 204))
   (let ((input "this is a test"))
-    (o-assert-equal
-      (o-fold
-        (lambda (acc a)
-               (concat acc (o-join-chars (list a))))
-        ""
-        (string-to-list input))
-      input
-      (concat error-prelude "error: fold test(s) failed")))
+    (should (equal (o-fold
+                    (lambda (acc a)
+                      (concat acc (o-join-chars (list a))))
+                    ""
+                    (string-to-list input))
+                   input)))
   (let ((test-list '(3 1 2 5 4)))
-    (o-assert-equal
-      (o-fold-left
-        (lambda (acc a) (cons a acc))
-        '()
-        test-list)
-      (reverse test-list)
-      (concat error-prelude "error: fold-left (2) test(s) failed"))))
+    (should (equal (o-fold-left
+                    (lambda (acc a) (cons a acc))
+                    '()
+                    test-list)
+                   (reverse test-list)))))
 
-
-(defun othello-test-fold-right (error-prelude)
+(ert-deftest othello-test-fold-right ()
   (let ((test-list '(3 1 2 5 4)))
-    (o-assert-equal
-      (o-fold-right
-        (lambda (acc a) (cons a acc))
-        '()
-        test-list)
-      test-list
-      (concat error-prelude "error: fold-right test(s) failed"))))
+    (should (equal (o-fold-right
+                    (lambda (acc a) (cons a acc))
+                    '()
+                    test-list)
+                   test-list))))
 
 
 (defun othello-test-drop-take (error-prelude)
@@ -191,11 +173,9 @@
     (concat error-prelude "error: drop test(s) failed")))
 
 
-(defun othello-test-slice (error-prelude)
-  (o-assert-equal
-   (o-slice 1 4 '(3 1 2 5 4 0))
-   '(1 2 5)
-   (concat error-prelude "error: slice test(s) failed")))
+(ert-deftest othello-test-slice ()
+  (should (equal (o-slice 1 4 '(3 1 2 5 4 0))
+                 '(1 2 5))))
 
 
 (defun othello-test-zip (error-prelude)
@@ -214,14 +194,12 @@
    (concat error-prelude "error: enumerate test(s) failed")))
 
 
-(defun othello-test-zip-with (error-prelude)
-  (o-assert-equal
-   (o-zip-with
-    '+
-    '(3 1 2 5 4)
-    '(0 1 2 3))
-   '(3 2 4 8)
-   (concat error-prelude "error: zip test(s) failed")))
+(ert-deftest othello-test-zip-with ()
+  (should (equal (o-zip-with
+                  '+
+                  '(3 1 2 5 4)
+                  '(0 1 2 3))
+                 '(3 2 4 8))))
 
 
 (defun othello-test-enumerate-partition (error-prelude)
