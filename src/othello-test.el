@@ -145,6 +145,7 @@
                     test-list)
                    (reverse test-list)))))
 
+
 (ert-deftest othello-test-fold-right ()
   (let ((test-list '(3 1 2 5 4)))
     (should (equal (o-fold-right
@@ -154,23 +155,15 @@
                    test-list))))
 
 
-(defun othello-test-drop-take (error-prelude)
-  (o-assert-equal
-    (o-take 3 '(3 1 2 0 5 4))
-    '(3 1 2)
-    (concat error-prelude "error: take test(s) failed"))
-  (o-assert-equal
-    (o-takebut 2 '(3 1 2 0 5 4))
-    '(3 1 2 0)
-    (concat error-prelude "error: take test(s) failed"))
-  (o-assert-equal
-    (o-drop 3 '(3 1 2 0 5 4))
-    '(0 5 4)
-    (concat error-prelude "error: drop test(s) failed"))
-  (o-assert-equal
-    (o-dropbut 2 '(3 1 2 0 5 4))
-    '(5 4)
-    (concat error-prelude "error: drop test(s) failed")))
+(ert-deftest othello-test-drop-take ()
+  (should (equal (o-take 3 '(3 1 2 0 5 4))
+                 '(3 1 2)))
+  (should (equal (o-takebut 2 '(3 1 2 0 5 4))
+                 '(3 1 2 0)))
+  (should (equal (o-drop 3 '(3 1 2 0 5 4))
+                 '(0 5 4)))
+  (should (equal (o-dropbut 2 '(3 1 2 0 5 4))
+                 '(5 4))))
 
 
 (ert-deftest othello-test-slice ()
@@ -178,20 +171,17 @@
                  '(1 2 5))))
 
 
-(defun othello-test-zip (error-prelude)
-  (o-assert-equal
-   (o-zip '(3 1 2 5 4)
-          '(0 1 2 3))
-   '((3 0) (1 1) (2 2) (5 3))
-   (concat error-prelude "error: zip test(s) failed"))
-  (o-assert-equal
-   (o-zip-with-index (make-list 9 0))
-   '((0 0) (1 0) (2 0) (3 0) (4 0) (5 0) (6 0) (7 0) (8 0))
-   (concat error-prelude "error: zip-with-index test(s) failed"))
-  (o-assert-equal
-   (o-enumerate (make-list 9 0))
-   '((0 0) (1 0) (2 0) (3 0) (4 0) (5 0) (6 0) (7 0) (8 0))
-   (concat error-prelude "error: enumerate test(s) failed")))
+(ert-deftest othello-test-zip ()
+  (should (equal
+           (o-zip '(3 1 2 5 4)
+                  '(0 1 2 3))
+           '((3 0) (1 1) (2 2) (5 3))))
+  (should (equal
+           (o-zip-with-index (make-list 9 0))
+           '((0 0) (1 0) (2 0) (3 0) (4 0) (5 0) (6 0) (7 0) (8 0))))
+  (should (equal
+           (o-enumerate (make-list 9 0))
+           '((0 0) (1 0) (2 0) (3 0) (4 0) (5 0) (6 0) (7 0) (8 0)))))
 
 
 (ert-deftest othello-test-zip-with ()
@@ -227,15 +217,13 @@
     (concat error-prelude "error: drop test(s) failed")))
 
 
-(defun othello-test-o-begin (error-prelude)
-  (o-assert-equal
-    (let ((cnt 0))
-      (o-begin (setq cnt (o-inc cnt))
-          (setq cnt (o-inc cnt))
-          (setq cnt (o-inc cnt)))
-      cnt)
-    3
-    (concat error-prelude "error: begin test(s) failed")))
+(ert-deftest othello-test-o-begin ()
+  (should (equal (let ((cnt 0))
+                   (o-begin (setq cnt (o-inc cnt))
+                            (setq cnt (o-inc cnt))
+                            (setq cnt (o-inc cnt)))
+                   cnt)
+                 3)))
 
 
 (defun othello-test-for-comprehension (error-prelude)
@@ -366,20 +354,6 @@
    (o-when-not nil 'success)
    'success
    (concat error-prelude "error: when test(s) failed")))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; run unit tests
-
-(defun othello-test-run-tests (&rest tests)
-  (letrec ((prelude "othello-test ... ")
-           (execute-tests (lambda (fns)
-                            (cond ((o-null-p fns) nil)
-                                  (o-else (o-call (car fns) prelude)
-                                          (o-call execute-tests (cdr fns)))))))
-    (message (concat prelude "running tests..."))
-    (o-call execute-tests tests)
-    (message (concat prelude "passed all tests"))))
 
 
 
