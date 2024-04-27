@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: April 27, 2024
-;; Version: 0.10.22
+;; Version: 0.10.23
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -383,12 +383,12 @@ character does not represent an integer value."
   "Zip lists (LSTS) together and return a list of lists in which the first
 element is a list of the first elements of each list. The resulting zipped list
 will have the same length as the shortest of the provided lists."
-  (letrec ((any-p (lambda (lst)
+  (letrec ((any-null-p (lambda (lst)
                     (cond ((null lst) nil)
-                          ((car lst) t)
-                          (t (funcall any-p (cdr lst)))))))
+                          ((null (car lst)) t)
+                          (t (funcall any-null-p (cdr lst)))))))
     (cond ((null lsts) '())
-          ((funcall any-p (mapcar 'null lsts)) '())
+          ((funcall any-null-p lsts) '())
           (t (cons (apply 'list (mapcar 'car lsts))
                    (apply 'o-zip (mapcar 'cdr lsts)))))))
 
