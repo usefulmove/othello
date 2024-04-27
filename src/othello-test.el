@@ -223,56 +223,48 @@
                  3)))
 
 
-(defun othello-test-for-comprehension (error-prelude)
-  (o-assert-equal
-    (o-for-comp ((a (o-range (o-inc 8)))) (* a a a))
-    '(0 1 8 27 64 125 216 343 512)
-    (concat error-prelude "error: for comprehension test(s) failed"))
-  (o-assert-equal
-    (o-for-comp ((pair (o-enumerate '(3 1 2))))
-      (let ((ind (car pair))
-            (a (cadr pair)))
-        (* ind (* a a))))
-    '(0 1 8)
-    (concat error-prelude "error: for comprehension test(s) failed"))
-  (o-assert-equal
-    (o-for-comp ((i (o-range 3))
-                 (j (o-range 3)))
-      (cons i j))
-    '((0 . 0) (0 . 1) (0 . 2) (1 . 0) (1 . 1) (1 . 2) (2 . 0) (2 . 1) (2 . 2))
-    (concat error-prelude "error: for comprehension test(s) failed")))
+(ert-deftest othello-test-for-comprehension ()
+  (should (equal 
+           (o-for-comp ((a (o-range (o-inc 8)))) (* a a a))
+           '(0 1 8 27 64 125 216 343 512)))
+  (should (equal 
+           (o-for-comp ((pair (o-enumerate '(3 1 2))))
+                       (let ((ind (car pair))
+                             (a (cadr pair)))
+                         (* ind (* a a))))
+           '(0 1 8)))
+  (should (equal 
+           (o-for-comp ((i (o-range 3))
+                        (j (o-range 3)))
+                       (cons i j))
+           '((0 . 0) (0 . 1) (0 . 2) (1 . 0) (1 . 1) (1 . 2) (2 . 0) (2 . 1) (2 . 2)))))
 
 
-(defun othello-test-equality (error-prelude)
-  (o-assert-equal
-    (o-not= 1 1.0 1) ; nil
-    (o-eq-p 1 1.0) ; nil
-    (concat error-prelude "error: equality test(s) failed"))
-  (o-assert-equal
-    (o-not-eq-p 1 1.0) ; t
-    (o-not-equal-p 1 1.0) ; t
-    (concat error-prelude "error: equality test(s) failed"))
+(ert-deftest othello-test-equality ()
+  (should (equal 
+           (o-not= 1 1.0 1) ; nil
+           (o-eq-p 1 1.0))) ; nil
+  (should (equal 
+           (o-not-eq-p 1 1.0) ; t
+           (o-not-equal-p 1 1.0))) ; t
   (let ((a "eight")
         (b "eight"))
-    (o-assert-equal
-      (o-equal-p a b) ; t
-      (o-not-eq-p a b) ; t
-      (concat error-prelude "error: equality test(s) failed")))
-  (o-assert-equal
-    (o-not= 1 1.0) ; nil
-    (o-not-equal-p 1 1) ; nil
-    (concat error-prelude "error: equality test(s) failed")))
+    (should (equal 
+             (o-equal-p a b) ; t
+             (o-not-eq-p a b)))) ; t
+  (should (equal 
+           (o-not= 1 1.0) ; nil
+           (o-not-equal-p 1 1)))) ; nil
 
 
-(defun othello-test-chars (error-prelude)
-  (o-assert-equal
-    (o-char-to-int ?8)
-    8
-    (concat error-prelude "error: equality test(s) failed"))
-  (o-assert-equal
-    (o-char-to-ord ?8)
-    56
-    (concat error-prelude "error: equality test(s) failed")))
+(ert-deftest othello-test-chars ()
+  (should (equal 
+           (o-char-to-int ?8)
+           8))
+  (should (equal 
+           (o-char-to-ord ?8)
+           56)))
+
 
 (defun othello-test-impure (error-prelude)
   (let ((n 0))
