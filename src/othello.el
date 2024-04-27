@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: April 27, 2024
-;; Version: 0.9.21
+;; Version: 0.10.22
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -378,18 +378,19 @@ character does not represent an integer value."
   (o-drop start (o-take end lst)))
 
 
-;; o-zip :: [T] -> [U] -> [[T U]]
-(defun o-zip (lst1 lst2)
-  "Zip two lists (LST1) and (LST2) together and return an association list in
-which the first element comes from LST1 and the second element comes from LST2.
-The resulting zipped association list will have the same length as the shortest
-of the two provided lists."
-  (cond ((or (null lst1)
-             (null lst2)) '())
-        (t (cons (list (car lst1)
-                       (car lst2))
-                 (o-zip (cdr lst1)
-                        (cdr lst2))))))
+;; o-zip :: [T] -> [U] -> ... -> [[T U ...]]
+(defun o-zip (&rest lsts)
+  "Zip lists (LSTS) together and return a list of lists in which the first
+element is a list of the first elements of each list. The resulting zipped list
+will have the same length as the shortest of the provided lists."
+  (letrec ((any-p (lambda (lst)
+                    (cond ((null lst) nil)
+                          ((car lst) t)
+                          (t (funcall any-p (cdr lst)))))))
+    (cond ((null lsts) '())
+          ((funcall any-p (mapcar 'null lsts)) '())
+          (t (cons (apply 'list (mapcar 'car lsts))
+                   (apply 'o-zip (mapcar 'cdr lsts)))))))
 
 
 ;; o-zip-with-index :: [T] -> [[int T]]

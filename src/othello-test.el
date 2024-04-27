@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
 ;; Modified: April 27, 2024
-;; Version: 0.9.21
+;; Version: 0.10.22
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -182,6 +182,15 @@
   (should (equal
            (o-enumerate (make-list 9 0))
            '((0 0) (1 0) (2 0) (3 0) (4 0) (5 0) (6 0) (7 0) (8 0)))))
+
+
+(ert-deftest othello-test-zip2 ()
+   (should (equal
+            (o-zip '(3 1 2) '(0 5 4))
+            '((3 0) (1 5) (2 4))))
+   (should (equal
+            (o-zip '(3 1 2) '(0 5))
+            '((3 0) (1 5)))))
 
 
 (ert-deftest othello-test-zip-with ()
