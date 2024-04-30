@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 27, 2024
-;; Version: 0.10.23
+;; Modified: April 29, 2024
+;; Version: 0.10.24
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -215,9 +215,11 @@ direction through the list compared with fold left (o-fold-left)."
   "Thread a SEED value through the function defined by the composition of the
 list of functions (FNS). This higher-order function can simplify (and make more
 expressive) deeply nested compositional patterns."
+  (message (prin1-to-string fns))
   (cond ((null fns) seed)
-        (t (apply 'o-thread (cons (funcall (car fns) seed)
-                                (cdr fns))))))
+        (t (let ((f (car fns))
+                 (rest (cdr fns)))
+             (apply 'o-thread (funcall f seed) rest)))))
 
 
 ;; o-compose :: [(T -> T)] -> (T -> T)
