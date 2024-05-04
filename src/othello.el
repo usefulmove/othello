@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
-;; Modified: April 29, 2024
-;; Version: 0.10.24
+;; Modified: March 4, 2024
+;; Version: 0.11.25
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -320,11 +320,10 @@ at the provided TO (non-inclusive)."
 
 ;; o-char-to-int :: char -> integer
 (defun o-char-to-int (c)
-  "Convert numeric character (C) to its numeric equivalent. Return -1 if
-character does not represent an integer value."
+  "Convert numeric character (C) to its numeric equivalent."
   (if (member c '(?0 ?1 ?2 ?3 ?4 ?5 ?6 ?7 ?8 ?9))
-    (- c ?0)
-    -1))
+      (- c ?0)
+    (error "invalid argument passed to o-char-to-int")))
 
 
 ;; o-char-to-ord :: char -> integer

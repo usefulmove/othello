@@ -5,8 +5,8 @@
 ;; Author: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
-;; Modified: April 27, 2024
-;; Version: 0.10.22
+;; Modified: March 4, 2024
+;; Version: 0.11.25
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -272,7 +272,11 @@
            8))
   (should (equal 
            (o-char-to-ord ?8)
-           56)))
+           56))
+  (should (equal
+           (o-char-to-ord ?a)
+           97))
+  (should-error (o-char-to-int ?a)))
 
 
 (ert-deftest othello-test-impure ()
