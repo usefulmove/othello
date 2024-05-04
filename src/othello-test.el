@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 30, 2023
 ;; Modified: March 4, 2024
-;; Version: 0.11.25
+;; Version: 0.12.26
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -181,7 +181,7 @@
            '((0 0) (1 0) (2 0) (3 0) (4 0) (5 0) (6 0) (7 0) (8 0))))
   (should (equal
            (o-enumerate (make-list 9 0))
-           '((0 0) (1 0) (2 0) (3 0) (4 0) (5 0) (6 0) (7 0) (8 0)))))
+           '((0 . 0) (1 . 0) (2 . 0) (3 . 0) (4 . 0) (5 . 0) (6 . 0) (7 . 0) (8 . 0)))))
 
 
 (ert-deftest othello-test-zip2 ()
@@ -204,7 +204,7 @@
 (ert-deftest othello-test-enumerate-partition ()
   (should (equal 
            (o-enumerate '(3 1 2 5 4))
-           '((0 3) (1 1) (2 2) (3 5) (4 4))))
+           '((0 . 3) (1 . 1) (2 . 2) (3 . 5) (4 . 4))))
   (should (equal 
            (o-partition 'o-odd-p '(8 1 2 0 3 5 4 6))
            '((5 3 1) (6 4 0 2 8)))))
@@ -239,7 +239,7 @@
   (should (equal 
            (o-for-comp ((pair (o-enumerate '(3 1 2))))
                        (let ((ind (car pair))
-                             (a (cadr pair)))
+                             (a (cdr pair)))
                          (* ind (* a a))))
            '(0 1 8)))
   (should (equal 

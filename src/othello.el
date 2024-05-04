@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: March 4, 2024
-;; Version: 0.11.25
+;; Version: 0.12.26
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -399,9 +399,6 @@ will have the same length as the shortest of the provided lists."
   (o-zip (o-range (length lst)) lst))
 
 
-;; o-enumerate :: [T] -> [[int T]]
-(fset 'o-enumerate #'o-zip-with-index)
-
 
 ;; o-zip-with :: (T -> U -> V) -> [T] -> [U] -> [V]
 (defun o-zip-with (f lst1 lst2)
@@ -412,11 +409,16 @@ will have the same length as the shortest of the provided lists."
 
 
 ;; o-enumerate :: [T] -> [[integer . T]]
-(defun o-enumerate (lst)
+(defun o-enumerate (lst &rest args)
   "Enumerate the list (LST) by returning an association list whose elements are
 the element index (0-based) and the element itself."
-  (o-zip (o-range (length lst))
-       lst))
+  (let ((index (if (null args)
+                   0
+                 (car args))))
+    (if (null lst)
+        '()
+      (cons (cons index (car lst))
+            (o-enumerate (cdr lst) (+ 1 index))))))
 
 
 ;; o-partition :: (T -> boolean) -> [T] -> [[T] [T]]
