@@ -6,7 +6,7 @@
 ;; Maintainer: Duane Edmonds <duane.edmonds@gmail.com>
 ;; Created: August 23, 2023
 ;; Modified: March 4, 2024
-;; Version: 0.12.26
+;; Version: 0.12.27
 ;; Keywords: language extensions internal lisp tools emacs
 ;; Homepage: https://github.com/usefulmove/othello
 ;; Package-Requires: ((emacs "25.1"))
@@ -390,7 +390,7 @@ will have the same length as the shortest of the provided lists."
                           (t (funcall any-null-p (cdr lst)))))))
     (cond ((null lsts) '())
           ((funcall any-null-p lsts) '())
-          (t (cons (apply 'list (mapcar 'car lsts))
+          (t (cons (mapcar 'car lsts)
                    (apply 'o-zip (mapcar 'cdr lsts)))))))
 
 
